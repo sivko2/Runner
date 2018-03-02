@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,user-scalable=no"/>
+		<title>Runner Calculator</title>
+		<link rel="stylesheet"  href="lib/tau/themes/default/tau.min.css">
+		<link rel="stylesheet"  href="css/style.css">
+	</head>
+	<script type="text/javascript" src="lib/tau/js/tau.min.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/lowBatteryCheck.js"></script>
+	<body onload="init()">
+		<audio src="audio/click.wav" id="clickSound"></audio>
+		<div class="ui-page ui-page-active" id="main">
+			<header class="ui-header ui-color-red">
+				<h2 class="ui-title">Runner Calculator</h2>
+			</header>
+			<div class="ui-content">
+				<ul class="ui-listview">
+					<li><a id="ageField" href="#inputMask" onclick="openInputDialog(0)" align="left" width="100%">Age: 30 years</a></li>
+					<li><a id="heightField" href="#inputMask" onclick="openInputDialog(1)" align="left" width="100%">Height: 177 cm</a></li>
+					<li><a id="weightField" href="#inputMask" onclick="openInputDialog(2)" align="left" width="100%">Weight: 70 kg</a></li>
+					<li><a id="bpmField" href="#inputMask" onclick="openInputDialog(3)" align="left" width="100%">Rest BPM: 70</a></li>
+					<li><a id="runBpmField" href="#inputMask" onclick="openInputDialog(4)" align="left" width="100%">Run BPM: 150</a></li>
+					<li><a id="distField" href="#inputMask" onclick="openInputDialog(5)" align="left" width="100%">Dist.: 1000 m</a></li>
+					<li><a id="timeField" href="#inputMask" onclick="openInputDialog(6)" align="left" width="100%">Time: 00:05:45</a></li>
+				</ul>
+			</div>
+			<footer class="ui-footer ui-color-red">
+				<div width="100%">
+					<table width="100%">
+						<tr width="100%">
+							<!-- th width="33%"><a class="ui-btn ui-color-red" style="text-align: left;" onclick="doCalc()" href="#calc">Calc</a></th>
+							<th width="34%"><a class="ui-btn ui-color-red" style="text-align: center;" href="#count">Pedo</a></th>
+							<th width="33%"><a class="ui-btn ui-color-red" style="text-align: right;" href="#settings">Set</a></th-->
+							<th width="25%" valign="top">
+								<a class="ui-btn ui-color-red" style="text-align: center;" onclick="doCalc()" href="#calc">
+									<img valign="top" src="images/calc.png"></img>
+								</a>
+							</th>
+							<th width="25%">
+								<a class="ui-btn ui-color-red" style="text-align: center;" onclick="startPedo()" href="#pedo">
+									<img valign="top" src="images/pedo.png"></img>
+								</a>
+							</th>
+							<th width="25%">
+								<a class="ui-btn ui-color-red" style="text-align: center;" onclick="fillHistory()" href="#history">
+									<img valign="top" src="images/history.png"></img>
+								</a>
+							</th>
+							<th width="25%">
+								<a class="ui-btn ui-color-red" style="text-align: center;" href="#settings">
+									<img valign="top" src="images/settings.png"></img>
+								</a>
+							</th>
+						</tr>
+					</table>
+				</div>
+			</footer>
+		</div>
+
+		<div class="ui-page" id="settings">
+			<header class="ui-header ui-color-red">
+				<h2 class="ui-title">Settings</h2>
+			</header>
+			<div class="ui-content" style="margin: 5px;">
+				<div>Measure units:</div>
+				<div>
+					<table>
+						<tr>
+							<th><input valign="bottom" type="radio" name="radioset" id="radio-m" onclick="storeSettings(true)"/></th>
+							<th><label valign="top" for="radio-m">Metric</label></th>
+						</tr>
+					</table>				
+				</div>
+				<div>
+					<table>
+						<tr>
+							<th><input valign="bottom" type="radio" name="radioset" id="radio-i" onclick="storeSettings(false)"/></th>
+							<th><label valign="top" for="radio-i">Imperial</label></th>
+						</tr>
+					</table>				
+				</div>
+			</div>
+			<footer class="ui-footer ui-color-red">
+				<a class="ui-btn ui-color-red" style="text-align: center;" onclick="tau.back()" href="#">
+					<img valign="top" src="images/back.png"></img>
+				</a>
+			</footer>
+		</div>
+		
+		<div class="ui-page" id="inputMask" style="background-color: #000000">
+			<div class="ui-content"#ce2302>
+				<div style="padding: 0px; background-color: #000000;">
+			    	<table width="100%">
+						<tr>
+							<th width="25%"><a href="#" onclick="tau.back()" class="ui-btn ui-color-red" id="keyCANCEL">X</a></th>
+							<th width="50%"><div id="display" width="100%"
+								style="font-size: xx-large; text-align: right; color: #ed8600; background-color: #000000; border: 0px solid white; padding: 5px;">0</div></th>
+							<th width="25%"><a href="#" onclick="doKey('ok')" class="ui-btn ui-color-green" id="keyOK">OK</a></th>
+			         	</tr>
+			      	</table>
+			    	<table width="100%">
+						<tr>
+							<th width="25%"><a href="#" onclick="doKey('k7')" class="ui-btn ui-color-orange" id="key7">7</a></th>
+							<th width="25%"><a href="#" onclick="doKey('k8')" class="ui-btn ui-color-orange" id="key8">8</a></th>
+							<th width="25%"><a href="#" onclick="doKey('k9')" class="ui-btn ui-color-orange" id="key9">9</a></th>
+							<th><a href="#" onclick="doKey('del')" class="ui-btn ui-color-green" id="keyDEL">←</a></th>
+				      	</tr>
+						<tr>
+							<th><a href="#" onclick="doKey('k4')" class="ui-btn ui-color-orange" id="key4">4</a></th>
+							<th><a href="#" onclick="doKey('k5')" class="ui-btn ui-color-orange" id="key5">5</a></th>
+							<th><a href="#" onclick="doKey('k6')" class="ui-btn ui-color-orange" id="key6">6</a></th>
+							<th><a href="#" onclick="doKey('kDOT')" class="ui-btn ui-color-orange" id="keyDOT">.</a></th>
+			         	</tr>
+						<tr>
+							<th><a href="#" onclick="doKey('k1')" class="ui-btn ui-color-orange" id="key1">1</a></th>
+							<th><a href="#" onclick="doKey('k2')" class="ui-btn ui-color-orange" id="key2">2</a></th>
+							<th><a href="#" onclick="doKey('k3')" class="ui-btn ui-color-orange" id="key3">3</a></th>
+			   				<th width="25%"><a href="#" onclick="doKey('k0')" class="ui-btn ui-color-orange" id="key0">0</a></th>
+			         	</tr>
+			      	</table>
+			     </div>
+		   	</div>
+		</div>
+		
+		<div class="ui-page" id="calc">
+			<header class="ui-header ui-color-red">
+				<h2 class="ui-title">Results</h2>
+			</header>
+			<div class="ui-content">
+				<div id="textValue" style="font-size: x-large; margin: 5px;"></div>
+			</div>
+			<footer class="ui-footer ui-color-red">
+				<a class="ui-btn ui-color-red" style="text-align: center;" onclick="tau.back()" href="#">
+					<img valign="top" src="images/back.png"></img>
+				</a>
+			</footer>
+		</div>
+		
+		<div class="ui-page" id="pedo">
+			<header class="ui-header ui-color-red">
+				<h2 class="ui-title">Pedometer</h2>
+			</header>
+			<div class="ui-content" style="margin: 5px;">
+				<table width="100%">
+					<tr>
+						<th width="50%">
+							<table width="100%">
+								<tr>
+									<th style="font-size: large;">Steps</th>
+								</tr>
+								<tr>
+									<th style="font-size: xx-large;" id="stepsDisp">0</th>
+								</tr>
+							</table>	
+						</th>
+						<th width="50%">
+							<table width="100%">
+								<tr>
+									<th style="font-size: large;">Distance</th>
+								</tr>
+								<tr>
+									<th style="font-size: xx-large;" id="distDisp">0 m</th>
+								</tr>
+							</table>	
+						</th>
+					</tr>
+					<tr>
+						<th><hr/></th>
+						<th><hr/></th>
+					</tr>
+					<tr>
+						<th width="50%">
+							<table width="100%">
+								<tr>
+									<th style="font-size: large;">Time</th>
+								</tr>
+								<tr>
+									<th style="font-size: xx-large;" id="timeDisp">00:00:00</th>
+								</tr>
+							</table>	
+						</th>
+						<th width="50%">
+							<table width="100%">
+								<tr>
+									<th style="font-size: large;">Mode</th>
+								</tr>
+								<tr>
+									<th style="font-size: xx-large;" id="modeDisp">-</th>
+								</tr>
+							</table>	
+						</th>
+					</tr>
+				</table>
+			</div>
+			<footer class="ui-footer ui-color-red">
+				<a class="ui-btn ui-color-red" style="text-align: center;" onclick="stopPedo()" href="#">
+					<img valign="top" src="images/finish.png"></img>
+				</a>
+			</footer>
+		</div>
+		
+		<div class="ui-page ui-page-active" id="history">
+			<div class="ui-content">
+				<ul class="ui-listview" id="historyList">
+					<li>
+						<a id="score0" href="#" onclick="" align="center" width="100%">
+							Empty list!
+						</a>
+					</li>
+				</ul>
+			</div>
+			<footer class="ui-footer ui-color-red">
+				<a class="ui-btn ui-color-red" style="text-align: center;" onclick="tau.back()" href="#">
+					<img valign="top" src="images/back.png"></img>
+				</a>
+			</footer>
+		</div>
+	</body>
+</html>
